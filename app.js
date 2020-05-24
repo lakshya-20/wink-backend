@@ -15,6 +15,8 @@ require('./models/user')
 require('./models/conversation')
 
 app.use(express.json())
+app.use(require('./routes/auth'))
+
 
 
 app.listen(PORT,()=>{
