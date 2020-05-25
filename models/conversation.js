@@ -18,7 +18,11 @@ const conversationSchema = new mongoose.Schema({
     data:String,
     senderId:{type:ObjectId,ref:"User"},
     time:{type:String,default:dateTime},
-    }]
+    }],
+    lastMessage:{
+        type:String,
+        default:""
+    }
 },{timestamps:true})
 
 mongoose.model("Conversation",conversationSchema)

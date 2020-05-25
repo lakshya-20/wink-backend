@@ -43,8 +43,18 @@ router.get('/conversationList',(req,res)=>{
     .populate("person2","_id name photo")
     .populate("messages","data time senderId")
     .then((result)=>{
+        //var message=result[0].messages.pop()
         res.json({result})
     }).catch(err=>{
+        console.log(err)
+    })
+})
+
+router.get('/getConversation',(req,res)=>{
+    Conversation.findById(req.body.conversationId)
+    .then((result)=>{
+        res.json(result)
+    }).catch((err)=>{
         console.log(err)
     })
 })
