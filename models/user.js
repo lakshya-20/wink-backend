@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema({
         default:"https://drive.google.com/uc?id=1a6RhWRlSfZ8sLpyJydE8RCIDjkHsLlDy"
     },
     conversations:[{
-    type:ObjectId,
-    ref:"Conversation"
+        person:{type:ObjectId,ref:"User"},
+        conversation:{type:ObjectId,ref:"Conversation"}
     }]
 },{timestamps:true})
 

@@ -8,6 +8,10 @@ var dateTime = date+' '+time;
 
 
 const conversationSchema = new mongoose.Schema({
+    lastActive:{
+        type:String,
+        default:dateTime
+    },
     messages:[{
     data:String,
     senderId:{type:ObjectId,ref:"User"},

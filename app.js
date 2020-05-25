@@ -16,8 +16,7 @@ require('./models/conversation')
 
 app.use(express.json())
 app.use(require('./routes/auth'))
-
-
+app.use(require('./routes/conversations'))
 
 app.listen(PORT,()=>{
     console.log("Server starting on port no: ",PORT)

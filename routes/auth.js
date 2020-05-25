@@ -44,6 +44,7 @@ router.post('/signup',(req,res)=>{
 })
 
 router.post('/signin',(req,res)=>{
+    
     const {email,password}=req.body
     if(!email || !password){
         res.status(422).json({error:"email and password are required"})
@@ -59,6 +60,7 @@ router.post('/signin',(req,res)=>{
                 const token=jwt.sign({_id:savedUser._id},JWT_SECRET)
                 const {_id,name,email,followers,following,photo}=savedUser
                 res.json({token,user:{_id,name,email,followers,following,photo}})
+                console.log(savedUser);
             }
             else{
                 return res.status(422).json({error:"Invalid username or password"})
