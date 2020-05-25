@@ -4,9 +4,11 @@ const mongoose = require('mongoose')
 const Conversation =  mongoose.model("Conversation")
 
 router.post('/createConversation',(req,res)=>{
-    const{lastactive}=req.body
+    const{lastactive,person1,person2}=req.body
     const conversation=new Conversation({
-        lastactive
+        lastactive,
+        person1,
+        person2
     })
     conversation.save().then(result=>{
         res.json({conversation:result})
@@ -35,6 +37,16 @@ router.post('/createMessage',(req,res)=>{
     })
 })
 
-
+router.get('/conversationList',(req,res)=>{
+    Conversation.find()
+    .populate("person1","_id name photo")
+    .populate("person2","_id name photo")
+    .populate("messages","data time senderId")
+    .then((result)=>{
+        res.json({result})
+    }).catch(err=>{
+        console.log(err)
+    })
+})
 
 module.exports=router;
