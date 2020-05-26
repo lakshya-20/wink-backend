@@ -2,8 +2,12 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const Conversation =  mongoose.model("Conversation")
+const User =  mongoose.model("User")
+
+mongoose.set('useFindAndModify', false);
 
 router.post('/createConversation',(req,res)=>{
+    var conversationId=""
     const{lastactive,person1,person2}=req.body
     const conversation=new Conversation({
         lastactive,
@@ -11,11 +15,30 @@ router.post('/createConversation',(req,res)=>{
         person2
     })
     conversation.save().then(result=>{
+        conversationId=result._id
+        const con1={
+            person:result.person2,
+            conversation:conversationId
+        }
+        const con2={
+            person:result.person1,
+            conversation:conversationId
+        }
+        User.findByIdAndUpdate(result.person1,{
+            $push:{conversations:con1}
+        }).then(result1=>{
+        })
+        User.findByIdAndUpdate(result.person2,{
+            $push:{conversations:con2}
+        }).then(result2=>{
+        })
         res.json({conversation:result})
     })
     .catch(err=>{
         console.log(err)    
     })
+    
+
 })
 
 router.post('/createMessage',(req,res)=>{
@@ -38,6 +61,7 @@ router.post('/createMessage',(req,res)=>{
 })
 
 router.get('/conversationList',(req,res)=>{
+    console.log("entered")
     Conversation.find()
     .populate("person1","_id name photo")
     .populate("person2","_id name photo")
@@ -50,8 +74,9 @@ router.get('/conversationList',(req,res)=>{
     })
 })
 
-router.get('/getConversation',(req,res)=>{
-    Conversation.findById(req.body.conversationId)
+router.get('/getConversation/:id',(req,res)=>{
+    console.log("entered2")
+    Conversation.findById(req.params.id)
     .then((result)=>{
         res.json(result)
     }).catch((err)=>{
