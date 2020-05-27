@@ -55,7 +55,7 @@ router.post('/createMessage',(req,res)=>{
             return res.status(422).json({error:err})
         }
         else{
-            res.json(result)
+            res.redirect(`/getConversation/${result._id}`)
         }
     })
 })
@@ -66,6 +66,7 @@ router.get('/conversationList',(req,res)=>{
     .populate("person1","_id name photo")
     .populate("person2","_id name photo")
     .populate("messages","data time senderId")
+    .populate("messages.senderId","name photo")
     .then((result)=>{
         //var message=result[0].messages.pop()
         res.json({result})
@@ -77,6 +78,10 @@ router.get('/conversationList',(req,res)=>{
 router.get('/getConversation/:id',(req,res)=>{
     console.log("entered2")
     Conversation.findById(req.params.id)
+    .populate("person1","_id name photo")
+    .populate("person2","_id name photo")
+    .populate("messages","data time senderId")
+    .populate("messages.senderId","name photo")
     .then((result)=>{
         res.json(result)
     }).catch((err)=>{
