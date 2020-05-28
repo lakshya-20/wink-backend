@@ -14,28 +14,40 @@ router.post('/createConversation',(req,res)=>{
         person1,
         person2
     })
-    conversation.save().then(result=>{
-        conversationId=result._id
-        const con1={
-            person:result.person2,
-            conversation:conversationId
+    Conversation.find({person1:person1,person2:person2})
+    .then((result)=>{
+        if(result){
+            res.redirect('/conversationList')
         }
-        const con2={
-            person:result.person1,
-            conversation:conversationId
+        else{
+            conversation.save().then(result=>{
+                conversationId=result._id
+                const con1={
+                    person:result.person2,
+                    conversation:conversationId
+                }
+                const con2={
+                    person:result.person1,
+                    conversation:conversationId
+                }
+                User.findByIdAndUpdate(result.person1,{
+                    $push:{conversations:con1}
+                }).then(result1=>{
+                })
+                User.findByIdAndUpdate(result.person2,{
+                    $push:{conversations:con2}
+                }).then(result2=>{
+                })
+                res.redirect('/conversationList')
+            })
+            .catch(err=>{
+                console.log(err)    
+            })
+            
         }
-        User.findByIdAndUpdate(result.person1,{
-            $push:{conversations:con1}
-        }).then(result1=>{
-        })
-        User.findByIdAndUpdate(result.person2,{
-            $push:{conversations:con2}
-        }).then(result2=>{
-        })
-        res.json({conversation:result})
-    })
-    .catch(err=>{
-        console.log(err)    
+        
+    }).catch((err)=>{
+        console.log(err)
     })
     
 
@@ -46,6 +58,7 @@ router.post('/createMessage',(req,res)=>{
         data:req.body.data,
         senderId:req.body.senderId,
     }
+
     Conversation.findByIdAndUpdate(req.body.conversationId,{
         $push:{messages:message}
     },{
@@ -88,5 +101,7 @@ router.get('/getConversation/:id',(req,res)=>{
         console.log(err)
     })
 })
+
+
 
 module.exports=router;
