@@ -9,12 +9,15 @@ mongoose.set('useFindAndModify', false);
 router.post('/createConversation',(req,res)=>{
     var conversationId=""
     const{lastactive,person1,person2}=req.body
+    var list=[]
+    list.push(person1)
+    list.push(person2)
     const conversation=new Conversation({
         lastactive,
         person1,
         person2
     })
-    Conversation.find({person1:person1,person2:person2})
+    Conversation.find({person1:{$in:[list[0],list[1]]},person1:{$in:[list[0],list[1]]}})
     .then((result)=>{
         if(result){
             conversationId=result[0]._id
