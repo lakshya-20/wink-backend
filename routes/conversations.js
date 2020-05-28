@@ -17,11 +17,11 @@ router.post('/createConversation',(req,res)=>{
         person1,
         person2
     })
-    Conversation.find({person1:{$in:[list[0],list[1]]},person1:{$in:[list[0],list[1]]}})
+    Conversation.find({person1:{$in:[list[0],list[1]]},person2:{$in:[list[0],list[1]]}})
     .then((result)=>{
-        if(result){
+        if(result[0]){
             conversationId=result[0]._id
-            res.json({conversationId})
+            res.json(conversationId)
         }
         else{
             conversation.save().then(result=>{
@@ -42,7 +42,8 @@ router.post('/createConversation',(req,res)=>{
                     $push:{conversations:con2}
                 }).then(result2=>{
                 })
-                res.redirect(result[0]._id)
+                conversationId=result[0]._id
+                res.json(conversationId)
             })
             .catch(err=>{
                 console.log(err)    
