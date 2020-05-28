@@ -17,7 +17,8 @@ router.post('/createConversation',(req,res)=>{
     Conversation.find({person1:person1,person2:person2})
     .then((result)=>{
         if(result){
-            res.redirect('/conversationList')
+            conversationId=result[0]._id
+            res.json({conversationId})
         }
         else{
             conversation.save().then(result=>{
@@ -38,7 +39,7 @@ router.post('/createConversation',(req,res)=>{
                     $push:{conversations:con2}
                 }).then(result2=>{
                 })
-                res.redirect('/conversationList')
+                res.redirect(result[0]._id)
             })
             .catch(err=>{
                 console.log(err)    
