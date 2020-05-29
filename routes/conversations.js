@@ -108,5 +108,36 @@ router.get('/getConversation/:id',(req,res)=>{
 })
 
 
+router.put('/deleteConversation/:id',(req,res)=>{
+    Conversation.findOne({_id:req.params.id})
+    .populate("person1","_id")
+    .populate("person2","_id")
+    .exec((err,conversation)=>{
+        if(err||!conversation){
+            return res.status(422).json({error:err})
+        }
+        if(conversation && !err){
+            conversation.remove()
+            .then(result=>{
+                User.findByIdAndUpdate(result.person1._id,{
+                    $pull:{conversations:{conversation:result._id}}
+                },{
+                    new:true
+                }).exec((err1,res1)=>{
+                })
+                User.findByIdAndUpdate(result.person2._id,{
+                    $pull:{conversations:{conversation:result._id}}
+                },{
+                    new:true
+                }).exec((err1,res1)=>{
+                })
+                res.json(result)
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
+    })
+})
+
 
 module.exports=router;
