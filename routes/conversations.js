@@ -24,7 +24,7 @@ router.post('/createConversation',(req,res)=>{
             res.json(conversationId)
         }
         else{
-            conversation.save().then(result=>{
+            conversation.save().then(result3=>{
                 conversationId=result._id
                 const con1={
                     person:result.person2,
@@ -42,7 +42,7 @@ router.post('/createConversation',(req,res)=>{
                     $push:{conversations:con2}
                 }).then(result2=>{
                 })
-                conversationId=result[0]._id
+                conversationId=result3._id
                 res.json(conversationId)
             })
             .catch(err=>{
