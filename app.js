@@ -30,9 +30,9 @@ client.on('connection',function(socket){
   socket.on('disconnect',function(){
     console.log("disconnected")
   })
-  socket.on('input',function(conversationId,data){
-    console.log("con",conversationId)
-    client.emit('output',conversationId,data);
+  socket.on('input',function(data){
+    console.log("new message in conversation",data.data._id)
+    client.emit('output',data);
   })
 });
 
