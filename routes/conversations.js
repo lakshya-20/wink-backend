@@ -86,7 +86,29 @@ router.get('/conversationList',(req,res)=>{
     .populate("messages","data time senderId")
     .populate("messages.senderId","name photo")
     .then((result)=>{
-        //var message=result[0].messages.pop()
+        res.json({result})
+    }).catch(err=>{
+        console.log(err)
+    })
+})
+
+router.post('/conversationList',(req,res)=>{
+    console.log("entered")
+    Conversation.find()
+    .populate("person1","_id name photo")
+    .populate("person2","_id name photo")
+    .populate("messages","data time senderId")
+    .populate("messages.senderId","name photo")
+    .then((result)=>{
+        var arr=[]
+        for(var i=0;i<result.length;i++){
+            arr.push(result[i].person1._id,result[i].person2._id)
+            id=req.body.id
+            if((id!=arr[0])&&(id!=arr[1])){
+                result.splice(i,1)
+            }
+            arr=[];
+        }
         res.json({result})
     }).catch(err=>{
         console.log(err)
