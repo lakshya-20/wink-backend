@@ -129,6 +129,11 @@ router.get('/getConversation/:id',(req,res)=>{
     })
 })
 
+router.get('/getConversation',(req,res)=>{
+    result=[]
+    res.json(result)
+})
+
 
 router.put('/deleteConversation/:id',(req,res)=>{
     Conversation.findOne({_id:req.params.id})
