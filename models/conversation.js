@@ -22,6 +22,10 @@ const conversationSchema = new mongoose.Schema({
     lastMessage:{
         type:String,
         default:""
+    },
+    roomId:{
+        type:String,
+        required:true
     }
 },{timestamps:true})
 

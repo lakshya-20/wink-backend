@@ -15,7 +15,8 @@ router.post('/createConversation',(req,res)=>{
     const conversation=new Conversation({
         lastactive,
         person1,
-        person2
+        person2,
+        roomId:Math.random().toString(36).substr(2, 9)
     })
     Conversation.find({person1:{$in:[list[0],list[1]]},person2:{$in:[list[0],list[1]]}})
     .then((result)=>{
