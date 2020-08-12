@@ -3,11 +3,11 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const Conversation =  mongoose.model("Conversation")
 const User =  mongoose.model("User")
-
+const requireLogin=require('../middleware/requireLogin')
 
 mongoose.set('useFindAndModify', false);
 
-router.post('/createConversation',(req,res)=>{
+router.post('/createConversation',requireLogin,(req,res)=>{
     var conversationId=""
     const{lastactive,person1,person2}=req.body
     var list=[]
@@ -60,7 +60,7 @@ router.post('/createConversation',(req,res)=>{
 
 })
 
-router.post('/createMessage',(req,res)=>{
+router.post('/createMessage',requireLogin,(req,res)=>{
     const message={
         data:req.body.data,
         senderId:req.body.senderId,
@@ -80,7 +80,7 @@ router.post('/createMessage',(req,res)=>{
     })
 })
 
-router.get('/conversationList',(req,res)=>{
+router.get('/conversationList',requireLogin,(req,res)=>{
     console.log("entered")
     Conversation.find()
     .populate("person1","_id name photo")
@@ -94,7 +94,7 @@ router.get('/conversationList',(req,res)=>{
     })
 })
 
-router.post('/conversationList',(req,res)=>{
+router.post('/conversationList',requireLogin,(req,res)=>{
     console.log("entered")
     Conversation.find()
     .populate("person1","_id name photo")
@@ -117,7 +117,7 @@ router.post('/conversationList',(req,res)=>{
     })
 })
 
-router.get('/getConversation/:id',(req,res)=>{
+router.get('/getConversation/:id',requireLogin,(req,res)=>{
     console.log("entered2")
     Conversation.findById(req.params.id)
     .populate("person1","_id name photo")
@@ -131,13 +131,13 @@ router.get('/getConversation/:id',(req,res)=>{
     })
 })
 
-router.get('/getConversation',(req,res)=>{
+router.get('/getConversation',requireLogin,(req,res)=>{
     result=[]
     res.json(result)
 })
 
 
-router.put('/deleteConversation/:id',(req,res)=>{
+router.put('/deleteConversation/:id',requireLogin,(req,res)=>{
     Conversation.findOne({_id:req.params.id})
     .populate("person1","_id")
     .populate("person2","_id")
